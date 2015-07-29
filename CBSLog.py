@@ -22,3 +22,8 @@ def CBS_LOG_INFO(logStr):
 def CBS_LOG_DEBUG(logStr):
     logger = logging.getLogger(CBS_LOG_TAG)
     logger.debug(logStr)
+
+
+def CBS_LOG_ERROR(logStr):
+    logger = logging.getLogger(CBS_LOG_TAG)
+    logger.error(logStr)
