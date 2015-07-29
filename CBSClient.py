@@ -60,6 +60,6 @@ class CBSClient(threading.Thread):
         if action == CBSP_ACT_UPDATE:
             try:
                 data = sock.recv(length)
-                clipCopy(data)
+                clipCopy(data.decode('utf-8'))
             except Exception, e:
                 CBS_LOG_ERROR("Error: %s" % (e))

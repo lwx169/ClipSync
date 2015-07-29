@@ -42,8 +42,8 @@ class CBSP(object):
     version = socket.htonl(CBSP_VERSION)
 
     def __init__(self, data):
-        self.content = data
-        self.length  = socket.htonl(len(data))
+        self.content = data.encode('utf-8')
+        self.length  = socket.htonl(len(self.content))
         self.header  = None
         self._packHeader()
 

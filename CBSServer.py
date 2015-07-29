@@ -51,14 +51,14 @@ class CBSServer(threading.Thread):
                     sock.send(cbsp.getHeader())
                     sock.send(cbsp.getContent())
                 except Exception, e:
-                    CBS_LOG_ERROR("Error: %s" % (e))
+                    CBS_LOG_ERROR("updateClip Error: %s" % (e))
 
 
     def _handleCBSP(self, sock):
         CBS_LOG_DEBUG("hanle CBSP packet")
         header = sock.recv(CBSP_HEADER_LEN)
         if len(header) != CBSP_HEADER_LEN:
-            CBS_LOG_ERROR("Error: invalid header length %d" % (len(header)))
+            CBS_LOG_ERROR("_handleCBSP Error: invalid header length %d" % (len(header)))
             return
 
         magic, action, version, length = struct.unpack(CBSP_HEADER_FMT, header)
@@ -73,6 +73,6 @@ class CBSServer(threading.Thread):
         if action == CBSP_ACT_UPDATE:
             try:
                 data = sock.recv(length)
-                clipCopy(data)
+                clipCopy(data.decode('utf-8'))
             except Exception, e:
-                CBS_LOG_ERROR("Error: %s" % (e))
+                CBS_LOG_ERROR("_handleCBSP Error: %s" % (e))
