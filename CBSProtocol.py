@@ -3,6 +3,8 @@
 import struct
 import socket
 
+from CBSLog import *
+
 '''
 ClipBoard Sync Protocol (TCP)
 
@@ -42,10 +44,11 @@ class CBSP(object):
     version = socket.htonl(CBSP_VERSION)
 
     def __init__(self, data):
-        self.content = data.encode('utf-8')
+        self.content = data
         self.length  = socket.htonl(len(self.content))
         self.header  = None
         self._packHeader()
+        self._encodeContent()
 
     def setAction(self, action):
         self.action = action
@@ -58,6 +61,12 @@ class CBSP(object):
         return self.action
 
     def getContent(self):
+        try:
+            decodeData = self.content.decode('utf-8')
+            self.content = decodeData
+        except Exception, e:
+            CBS_LOG_ERROR("decode failed")
+
         return self.content
 
     def getHeader(self):
@@ -67,3 +76,10 @@ class CBSP(object):
         self.header = struct.pack(CBSP_HEADER_FMT,
                                   self.magic, self.action,
                                   self.version, self.length)
+
+    def _encodeContent(self):
+        try:
+            utf8Data = self.content.encode('utf-8')
+            self.content = utf8Data
+        except Exception, e:
+            CBS_LOG_ERROR("encode failed")
